@@ -1,17 +1,17 @@
 import networkx
 
-from enable.api import ComponentEditor, Scrolled,Viewport
+from enable.api import ComponentEditor, Scrolled, Viewport
 from enable.tools.api import ViewportPanTool
 from traits.api import HasTraits, Instance, Dict, Any, Enum, \
         on_trait_change, Property, cached_property, List
 from traitsui.api import View, Item
 
-from dag_container import DAGContainer
-from graph_container import GraphContainer, SUPPORTED_LAYOUTS
-from graph_node_component import GraphNodeComponent
-from graph_node_selection_tool import GraphNodeSelectionTool
-from graph_node_hover_tool import GraphNodeHoverTool
-from graph_node_drag_tool import GraphNodeDragTool
+from .dag_container import DAGContainer
+from .graph_container import GraphContainer, SUPPORTED_LAYOUTS
+from .graph_node_component import GraphNodeComponent
+from .graph_node_selection_tool import GraphNodeSelectionTool
+from .graph_node_hover_tool import GraphNodeHoverTool
+from .graph_node_drag_tool import GraphNodeDragTool
 
 
 def graph_from_dict(d):
@@ -31,10 +31,11 @@ def graph_from_dict(d):
     """
 
     g = networkx.DiGraph()
-    for key, children in d.items():
+    for key, children in list(d.items()):
         for child in children:
             g.add_edge(key, child)
     return g
+
 
 class GraphView(HasTraits):
     """ View containing visualization of a networkx graph.
@@ -53,11 +54,12 @@ class GraphView(HasTraits):
     # The canvas which the graph will be drawn on
     _canvas = Instance(GraphContainer)
 
-    traits_view = View(Item('_container', editor=ComponentEditor(),
-                            show_label=False),
-                        width=400,
-                        height=400,
-                        resizable=True)
+    traits_view = View(
+        Item(
+            '_container', editor=ComponentEditor(), show_label=False),
+        width=400,
+        height=400,
+        resizable=True)
 
     def __init__(self, *args, **kw):
         super(GraphView, self).__init__(*args, **kw)
@@ -74,8 +76,9 @@ class GraphView(HasTraits):
             container = GraphContainer(style=self.layout)
 
         container.tools.append(GraphNodeSelectionTool(component=container))
-        container.tools.append(GraphNodeHoverTool(component=container,
-                                                  callback=self._on_hover))
+        container.tools.append(
+            GraphNodeHoverTool(
+                component=container, callback=self._on_hover))
         container.tools.append(GraphNodeDragTool(component=container))
         return container
 
@@ -84,11 +87,10 @@ class GraphView(HasTraits):
         """
 
         viewport = Viewport(component=self._canvas, enable_zoom=True)
-        viewport.view_position = [0,0]
+        viewport.view_position = [0, 0]
         viewport.tools.append(ViewportPanTool(viewport))
 
-        return Scrolled(self._canvas,
-                        viewport_component = viewport)
+        return Scrolled(self._canvas, viewport_component=viewport)
 
     @cached_property
     def _get_nodes(self):
@@ -115,9 +117,10 @@ class GraphView(HasTraits):
         self._canvas.style = new
 
     def _on_hover(self, label):
-        print "hovering over:", label
+        print("hovering over:", label)
 
 #    @on_trait_change('nodes.+')
+
     def node_changed(self, name, obj, old, new):
-        print "node changed"
+        print("node changed")
         self._canvas.request_redraw()

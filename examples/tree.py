@@ -1,7 +1,7 @@
 import networkx
 from graphcanvas.api import GraphView
 
-g=networkx.DiGraph()
+g = networkx.DiGraph()
 
 g.add_edge('root', 'child 1')
 g.add_edge('child 1', 'grandchild 1')

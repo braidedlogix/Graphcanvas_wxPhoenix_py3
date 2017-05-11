@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import mock
@@ -20,20 +20,18 @@ class DummyHasTraitsObject(HasTraits):
 
 
 class TestGraphFromDict(unittest.TestCase):
-
     def test_graph_from_dict(self):
-        d = {'a':['b'], 'b':['c', 'd'], 'c':[], 'd':[], 'e':['d']}
+        d = {'a': ['b'], 'b': ['c', 'd'], 'c': [], 'd': [], 'e': ['d']}
         g = graph_from_dict(d)
-        for key, value in d.iteritems():
+        for key, value in d.items():
             children = g.successors(key)
             expected_children = value
             self.assertListEqual(children, expected_children)
 
 
 class TestGraphView(unittest.TestCase):
-
     def setUp(self):
-        d = {'a':['b'], 'b':['c', 'd'], 'c':[], 'd':[], 'e':['d']}
+        d = {'a': ['b'], 'b': ['c', 'd'], 'c': [], 'd': [], 'e': ['d']}
         self.g = graph_from_dict(d)
         self.view = GraphView(graph=self.g, layout='spring')
 
@@ -44,7 +42,7 @@ class TestGraphView(unittest.TestCase):
     def test_canvas(self):
         self.assertIsInstance(self.view._canvas, DAGContainer)
         tools = self.view._canvas.tools
-        self.assertEquals(len(tools), 3)
+        self.assertEqual(len(tools), 3)
         self.assertIsInstance(tools[0], GraphNodeSelectionTool)
         self.assertIsInstance(tools[1], GraphNodeHoverTool)
 
@@ -61,14 +59,14 @@ class TestGraphView(unittest.TestCase):
         viewport = container.viewport_component
         self.assertIsInstance(viewport, Viewport)
 
-        self.assertEquals(len(viewport.tools), 2)
+        self.assertEqual(len(viewport.tools), 2)
         self.assertIsInstance(viewport.tools[0], ViewportZoomTool)
         self.assertIsInstance(viewport.tools[1], ViewportPanTool)
 
     def test_layout_changed(self):
         new_layout = 'circular'
         self.view.layout = new_layout
-        self.assertEquals(self.view._canvas.style, new_layout)
+        self.assertEqual(self.view._canvas.style, new_layout)
 
     def test_nodes(self):
         expected_nodes = self.g.nodes()
@@ -76,17 +74,17 @@ class TestGraphView(unittest.TestCase):
         self.assertListEqual(expected_nodes, view_nodes)
 
     def test_graph_changed(self):
-        d = {'a':['b'], 'b':['c', 'd'], 'c':[], 'd':[], 'e':['d']}
+        d = {'a': ['b'], 'b': ['c', 'd'], 'c': [], 'd': [], 'e': ['d']}
         g = graph_from_dict(d)
         view = GraphView(graph=g, layout='spring')
-        new_d = {'f':['g'], 'g':['h', 'i', 'j'], 'h':[], 'i':[], 'j':[]}
+        new_d = {'f': ['g'], 'g': ['h', 'i', 'j'], 'h': [], 'i': [], 'j': []}
         new_g = graph_from_dict(new_d)
         view.graph = new_g
         self.assertListEqual(view.nodes, new_g.nodes())
 
     @mock.patch('sys.stdout', new_callable=StringIO)
     def test_on_hover(self, mock_stdout):
-        view = GraphView(graph=graph_from_dict({'test':['test1']}))
+        view = GraphView(graph=graph_from_dict({'test': ['test1']}))
         _, hover_tool, _ = view._canvas.tools
         hover_tool._last_xy = (0, 0)
         hover_tool.on_hover()
@@ -104,6 +102,7 @@ class TestGraphView(unittest.TestCase):
 
         a.label = 'test'
         self.assertEqual(mock_stdout.getvalue(), 'node changed\n')
+
 
 if __name__ == '__main__':
     unittest.main()

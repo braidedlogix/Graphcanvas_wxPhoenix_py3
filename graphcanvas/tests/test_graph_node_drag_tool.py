@@ -16,9 +16,7 @@ class TestGraphNodeDragTool(EnableTestAssistant, unittest.TestCase):
         self.container = GraphContainer(graph=g)
         self.tool = GraphNodeDragTool(component=self.container)
         self.container.tools.append(self.tool)
-        self.container.components.append(
-            GraphNodeComponent(position=[0, 0])
-        )
+        self.container.components.append(GraphNodeComponent(position=[0, 0]))
 
     def tearDown(self):
         del self.container

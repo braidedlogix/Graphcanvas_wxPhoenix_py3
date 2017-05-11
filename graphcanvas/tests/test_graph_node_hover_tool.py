@@ -13,13 +13,12 @@ class TestGraphNodeHoverTool(unittest.TestCase):
     def setUp(self):
         g = networkx.DiGraph()
         self.container = GraphContainer(graph=g)
-        self.tool = GraphNodeHoverTool(component=self.container,
-                                       callback=mock.Mock())
+        self.tool = GraphNodeHoverTool(
+            component=self.container, callback=mock.Mock())
         self.container.tools.append(self.tool)
         self.container.components.append(
-            GraphNodeComponent(position=[0, 0],
-                               value='test')
-        )
+            GraphNodeComponent(
+                position=[0, 0], value='test'))
 
     def tearDown(self):
         del self.container
@@ -53,9 +52,8 @@ class TestGraphNodeHoverTool(unittest.TestCase):
         tool = GraphNodeHoverTool(component=container, callback=None)
         container.tools.append(tool)
         container.components.append(
-            GraphNodeComponent(position=[0, 0],
-                               value='test')
-        )
+            GraphNodeComponent(
+                position=[0, 0], value='test'))
 
         # test in
         tool._last_xy = (0, 0)

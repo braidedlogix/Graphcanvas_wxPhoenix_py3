@@ -47,7 +47,8 @@ class TestGraphNodeSelectionTool(unittest.TestCase):
     def test_traited_node(self):
         event = BasicEvent(x=0, y=0, handled=False)
         self.container.components.pop(0)
-        node = GraphNodeComponent(value=TraitedNodeValue(label='traited_node'), position=[0, 0])
+        node = GraphNodeComponent(
+            value=TraitedNodeValue(label='traited_node'), position=[0, 0])
         self.container.components.append(node)
         self.tool.normal_left_dclick(event)
         node.value.edit_traits.assert_called_once_with()

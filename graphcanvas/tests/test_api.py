@@ -5,8 +5,11 @@ class TestAPI(unittest.TestCase):
     def test_imports(self):
         import graphcanvas.api
         import_names = [
-            'DAGContainer', 'GraphContainer', 'GraphNodeComponent',
-            'GraphView', 'graph_from_dict',
+            'DAGContainer',
+            'GraphContainer',
+            'GraphNodeComponent',
+            'GraphView',
+            'graph_from_dict',
         ]
         # get all imports other than __items__
         dir_no_dunders = [

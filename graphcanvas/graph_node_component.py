@@ -31,11 +31,12 @@ class GraphNodeComponent(Component):
     padding_top = 5
     padding_bottom = 5
 
-    traits_view = View(HGroup(
-                           spring,
-                           Item('value', style='readonly', show_label=False),
-                           spring),
-                        width=200, resizable=True)
+    traits_view = View(
+        HGroup(
+            spring, Item(
+                'value', style='readonly', show_label=False), spring),
+        width=200,
+        resizable=True)
 
     def draw(self, gc, view_bounds=None, mode="default"):
         """ Draws the graph node
@@ -54,11 +55,9 @@ class GraphNodeComponent(Component):
         self._draw_text(gc, view_bounds, mode)
 
     def _draw_text(self, gc, view_bounds, mode):
-        pos = (self.x + self.padding_left,
-               self.y + self.padding_bottom)
+        pos = (self.x + self.padding_left, self.y + self.padding_bottom)
 
         gc.show_text(self.label, pos)
-
 
     def _draw_border(self, gc, view_bounds, mode):
         """ Draws a nicely shaded border around the graph node
@@ -73,22 +72,16 @@ class GraphNodeComponent(Component):
         gc.save_state()
         gc.begin_path()
         gc.move_to(x + end_radius, y)
-        gc.arc_to(x + self.width, y,
-                x + self.width, y + end_radius,
-                end_radius)
-        gc.arc_to(x + self.width, y + self.height,
-                x + self.width - end_radius, y + self.height,
-                end_radius)
-        gc.arc_to(x, y + self.height,
-                x, y + self.height - end_radius,
-                end_radius)
-        gc.arc_to(x, y,
-                x + end_radius, y,
-                end_radius)
+        gc.arc_to(x + self.width, y, x + self.width, y + end_radius,
+                  end_radius)
+        gc.arc_to(x + self.width, y + self.height, x + self.width - end_radius,
+                  y + self.height, end_radius)
+        gc.arc_to(x, y + self.height, x, y + self.height - end_radius,
+                  end_radius)
+        gc.arc_to(x, y, x + end_radius, y, end_radius)
 
-        gc.linear_gradient(x, y, x, y+100,
-                numpy.array([starting_color, ending_color]),
-                "pad")
+        gc.linear_gradient(x, y, x, y + 100,
+                           numpy.array([starting_color, ending_color]), "pad")
 
         gc.draw_path()
         gc.restore_state()
